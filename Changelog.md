@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added 
 
-- Created file for Chapter 1
+- Created file for Chapter 1 + Overview of Concepts
 - Added output and source directories
+- added directory for figures
 - added versioning
 
 ### Fixed
