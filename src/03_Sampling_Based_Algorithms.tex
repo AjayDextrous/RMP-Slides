@@ -1,0 +1,112 @@
+\documentclass{beamer}
+
+\mode<presentation>
+{
+  \usetheme{umbc1}
+  \setbeamercovered{transparent}
+}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[]{datatool, filecontents}
+\DTLsetseparator{=}
+\DTLloaddb[noheader, keys={key,value}]{values}{./values.dat}
+\newcommand{\var}[1]{\DTLfetch{values}{key}{#1}{value}}
+
+\usepackage{tabularray}
+
+\title[RMP v\var{version}]
+{Robot Motion Planning}
+
+\subtitle
+{Sampling Based Algorithms}
+
+\author[Narayanan]
+{A.~Narayanan\inst{1}}
+
+\institute[Technical University of Munich]
+{
+  \inst{1}
+  Department of Informatics\\
+}
+
+\subject{Slides}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+\begin{document}
+\begin{frame}
+    \titlepage
+  \end{frame}
+  
+  \begin{frame}{Outline}
+    \tableofcontents
+  \end{frame}
+
+  \section{Overview of Sampling Based Approaches}
+
+  \begin{frame}{Difficulty with Classical Approaches}
+    \begin{itemize}
+      \item Curse of dimensionality
+      \item Running time increases exponentially with dimensions of configuration space
+      \item Several variants of the path planning problem have proven to be PSPACE-hard
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Drawbacks of Combinatorial Approaches}
+    
+  \end{frame}
+
+  \section[PRMs]{Probablilistic Roadmaps}
+
+  \begin{frame}
+    \frametitle{Multiple Query Roadmaps}
+    A multiple query approach tries to capture the connectivity of the
+free space as good as possible, such that multiple, different queries
+for paths can be answered very fast. In other words: create a
+roadmap that is suitable for as many use cases as p
+    
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{PRM - Probablistic Roadmaps}
+    Basic steps to construct a PRM:
+    \begin{enumerate}
+      \item sample vertices and keep vertices that do not lie on an obstacle
+      \item find neighbour vertices - k-nearest neighbour or neighbours within a specified radius
+      \item connect neighbouring vertices with edges (lines) (and check for collisions on connecting line using e.g. discretized line search)
+      \item add vertices and edges until roadmap is dense enough
+    \end{enumerate}
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{PRM Visualized}
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Drawbacks}
+    PRMs don’t perform well when there are narrow passages.
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{OBPRM - Obstacle Based PRM}
+    Obstacle-based PRMs are constructed by sampling only close to
+obstacles. During sampling, the first goal is to find a point that
+lies inside an obstacle. Then, another point is sampled at an
+arbitrary distance to the first point. Using step-wise approximation, a point sufficiently close to the obstacle border is searched.
+  
+  \end{frame}
+
+
+\end{document}

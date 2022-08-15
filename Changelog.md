@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 
 - Created file for Chapter 1 + Overview of Concepts
+- Created file for Chapter 2 + added basic topics
+- Created file for Chapter 3 
 - Added output and source directories
 - added directory for figures
 - added versioning

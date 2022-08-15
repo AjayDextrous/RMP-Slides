@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[handout]{beamer}
 
 \mode<presentation>
 {
@@ -32,6 +32,8 @@
   Department of Informatics\\
 }
 
+\date{}
+
 \subject{Slides}
 
 \AtBeginSubsection[]
@@ -56,7 +58,7 @@
 
 \subsection[Classification]{Classification}
 
-  \begin{frame}{Classification by concepts}
+  \begin{frame}{Classification on the basis of \dots}
       \centering
     \begin{table}
       \begin{tblr}{c|Q[3cm,valign=m]|Q[3.5cm,valign=m]}
@@ -122,6 +124,11 @@
 
 \section[Bug Algorithms]{Bug Algorithms}
 
+\begin{frame}
+  \centering
+  \textbf{Bug Algorithms}
+\end{frame}
+
 \subsection[Assumptions]{Assumptions}
 
 \begin{frame}{Assumptions}
@@ -136,9 +143,95 @@
 
 \subsection[Bug 1]{Bug 1 Algorithm}
 
+\begin{frame}
+  \frametitle{Bug 1 Algorithm}
+  \centering
+  \begin{scriptsize}
+  \begin{table}
+    \begin{tblr}{|X|}
+      \hline
+        \textbf{Strategy: } \\
+        
+           -  Robot moves directly towards goal.\\
+           -  If an obstacle is encountered, then mark this hit point as $q_{1h}$ and circumnavigate around the obstacle.\\
+           -  At every point on obstacle boundary, measure the distance towards goal.\\
+           -  if $q_{1h}$ has reached again, traverse to $q_{1l}$ point which is the nearest point to the goal.\\
+           -  leave the obstacle boundary at this point, then move towards the goal again.\\
+           -  Repeat the same cycle very-time the robot faces a new obstacle, till the goal is reached.\\
+        
+        \hline 
+        \textbf{Robot Capabilities: } \\
+         - Robot must be able to measure and memorize distance from certain point to the goal \\
+         - Robot must be able to detect the collision with the obstacle \\
+        \hline
+        \textbf{Bounds on path distance:}
+        $D$: start-to-goal distance\\
+        $P_{i}$: obstacle perimeter\\
+
+        Worst case: $D + 1.5\sum P_{i}$\\
+        \hline
+    \end{tblr}
+  \end{table}
+\end{scriptsize}
+\end{frame}
+
 \subsection[Bug 2]{Bug 2 Algorithm}
 
+\begin{frame}
+  \frametitle{Bug 2 Algorithm}
+  \centering
+  \begin{scriptsize}
+  \begin{table}
+    \begin{tblr}{|X|}
+      \hline
+        \textbf{Strategy: } \\
+        
+           -  Robot moves directly towards goal following a line called M-line.\\
+           -  If an obstacle is encountered, circumnavigate obstacle till the robot intersects with M-line.\\
+           -  Leave boundary at this point and keep moving towards the goal.\\        
+           -  Repeat the same cycle very-time the robot faces a new obstacle, till the goal is reached.\\
+        
+        \hline 
+        \textbf{Robot Capabilities: } \\
+         - Robot must be able to know where M-line is and able to follow it \\
+         - Robot must be able to detect the collision with the obstacle \\
+        \hline
+        \textbf{Bounds on path distance:}
+        Worst case: $D + 0.5\sum n_{i}P_{i}$\\
+        Where $n_{i}$: number of times the M-line intersects ith obstacle \\
+        \hline
+    \end{tblr}
+  \end{table}
+\end{scriptsize}
+\end{frame}
+
 \subsection[Tangential Bug]{Tangential Bug Algorithm}
+
+\begin{frame}
+  \frametitle{Tangential Bug Algorithm}
+  \centering
+  \begin{scriptsize}
+  \begin{table}
+    \begin{tblr}{|X|}
+      \hline
+      \textbf{Tangenial Bug is an improvement of BUG 2 Algorithm using $360^{\circ}$ range sensor with infinite orientation resolution}
+        \textbf{Strategy: } \\
+        
+           -  Robot moves directly towards goal till obstance encountered.\\
+           -  The robot detects all tangential points, which are points of intersection between range sensor tangential and obstacle boundary\\
+           -  The robot determines the point which extremely reduces what is called heuristic distance.\\        
+           -  $H(heuristic) = d(X, Q_{i}) + d(Q_{i}, Q_{goal})$.\\
+           -  The robot moves towards this point and follow the boundary until $D_{reach} < D_{followed}$, then leave the boundary and move towards the goal. \\
+           -  Repeat the same cycle at every obstacle encountered till the goal is reached.\\
+        \hline 
+        \textbf{Robot Capabilities: } \\
+         - Robot must be able to determine all tangential points (discontinuity)\\
+         - Robot must know where the gaol is and measure the distance between certain point and the goal \\
+        \hline
+    \end{tblr}
+  \end{table}
+\end{scriptsize}
+\end{frame}
 
 \section[Configuration Space]{Configuration Space}
 
