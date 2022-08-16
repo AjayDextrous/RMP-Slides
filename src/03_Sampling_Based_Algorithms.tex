@@ -112,10 +112,46 @@ roadmap that is suitable for as many use cases as p
 
   \begin{frame}
     \frametitle{OBPRM - Obstacle Based PRM}
-    Obstacle-based PRMs are constructed by sampling only close to
-obstacles. During sampling, the first goal is to find a point that
-lies inside an obstacle. Then, another point is sampled at an
-arbitrary distance to the first point. Using step-wise approximation, a point sufficiently close to the obstacle border is searched.
+    Obstacle-based PRMs are constructed by sampling only close to obstacles. During sampling, the first goal is to find a point that lies inside an obstacle. Then, another point is sampled at an arbitrary distance to the first point. Using step-wise approximation, a point sufficiently close to the obstacle border is searched.
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Gaussian Sampler}
+    \begin{itemize}
+      \item The Gaussian sampler addresses the narrow passage problem by sampling from a Gaussian distribution that is biased near the obstacles.
+    \end{itemize}
+
+    \textbf{Steps:}
+    \begin{enumerate}
+      \item first generate a configuration $q_{1}$ randomly from a uniform distribution.
+      \item Then a distance step is chosen according to a normal distribution to generate a configuration $q_{2}$ at random at distance step from $q_{1}$.
+      \item Both configurations are discarded if both are in collision or if both are collision-free. A sample is added to the roadmap if it is collision-free and the other sample is in collision.
+    \end{enumerate}
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Sampling Inside Narrow Passages - Bridge Planner}
+  
+    \begin{itemize}
+      \item The bridge planner uses a bridge test to sample configurations inside narrow passages.
+    \end{itemize}
+
+    \begin{enumerate}
+      \item sample 2 configurations $q'$ and $q"$ from a uniform distribution in $\mathcal{Q}$
+      \item add to roadmap if collision free
+      \item if both are in collision then add $q_{m}$ halfway between them to the roadmap if it is collision free
+    \end{enumerate}
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Resample (random-bounce walk )}
+    % not sure if this should be here, check to make sure
+    if there is no path found, using random-bounce walk to generate new milestones, improve the C-space connectivity.
+    
+    A random-bounce walk from q refers to picking a random direction of motion and moving in this direction until a collision occurs, then a new random direction is chosen. The above steps are repeated until the max. distance is reached, then the current configuration q' and the edge (q, q) are inserted into the roadmap.
   
   \end{frame}
 
@@ -123,6 +159,13 @@ arbitrary distance to the first point. Using step-wise approximation, a point su
     \frametitle{Single Query Roadmaps}
     Single query planners try to solve a single query as fast as possible, without trying to cover the whole free space
     
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Single Query PRM}
+  
+    PRM itself can also be used as single-query planner. In that case, $q_{init}$ and $q_{goal}$ should be inserted to the roadmap at the beginning. The planner should check periodically if the given query can be solved, that is if $q_{init}$ and $q_{goal}$ belong to the same component of the roadmap. At that point, the construction of the roadmap should be aborted
+  
   \end{frame}
 
   \begin{frame}
@@ -152,7 +195,7 @@ arbitrary distance to the first point. Using step-wise approximation, a point su
       \item repeat steps until $q_{goal}$ is reached
     \end{enumerate}
 
-    For faster execution, the tree can be grown from both $q_{start}$ and $q_{goal}$
+    For faster execution, the tree can be grown from both $q_{start}$ and $q_{goal}$ (RRT-Connect)
   
   \end{frame}
 
@@ -162,13 +205,37 @@ arbitrary distance to the first point. Using step-wise approximation, a point su
   \end{frame}
 
   \begin{frame}
-    \frametitle{Path Smoothening}
+    \frametitle{Path Optimization}
   \end{frame}
 
   \subsection{Expansiveness}
 
   \begin{frame}
     \frametitle{$\epsilon, \alpha, \beta$ - Expansiveness}
+
+    \begin{itemize}
+      \item A PRM has good \texttt{coverage} if the milestones are distributed in such a way that (almost) any point in the free C-space can be connected to one milestone via a straight line.
+      \item A PRM has good \texttt{connectivity} if every milestone is reachable from any other milestone
+      \item The coverage and connectivity are characterized by the \textbf{Expansiveness} of the space given by $\epsilon, \alpha, \beta$
+    \end{itemize}
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Definition}
+    A free space F is $(\epsilon, \alpha, \beta)$-expansive, if it satisfies these conditions:
+
+    \begin{enumerate}
+      \item $\mu(V(p)) \geq \epsilon, \forall p \in F$
+
+      $\Longrightarrow$ each point $p$ must see at least an $\epsilon$ fraction of the free space $F$ $\rightarrow$ $F$ is $\epsilon$-good
+      \item $\beta - lookout(S) = \{q \in S \,|\,  \mu(V(q)\setminus S) \geq \beta \cdot \mu(F\setminus S)\}$ 
+      $\Longrightarrow$ for any $S \subseteq F$, the $\beta - lookout(S)$ is defined as the subset of points $p$ that can see at least a $\beta$-fraction of the complementary space of $S (\equiv F \setminus S)$
+      \item $\alpha$ is then defined as the relative volume of these points $p$ to $S$: $\frac{\mu(\beta - lookout(S))}{\mu(S)}$
+    \end{enumerate}
+
+    with $\epsilon, \alpha, \beta \in (0, 1], V(\cdot)$ as the set of visible points of a point and $\mu(\cdot)$ denoting the volume of the set of points
+    
   
   \end{frame}
 

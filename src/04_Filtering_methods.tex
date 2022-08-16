@@ -1,0 +1,80 @@
+\documentclass[handout]{beamer}
+
+\mode<presentation>
+{
+  \usetheme{umbc1}
+  \setbeamercovered{transparent}
+}
+
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+
+\usepackage[]{datatool, filecontents}
+\DTLsetseparator{=}
+\DTLloaddb[noheader, keys={key,value}]{values}{./values.dat}
+\newcommand{\var}[1]{\DTLfetch{values}{key}{#1}{value}}
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}       % "top" strut
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}} % "bottom" strut
+\newcommand{\TBstrut}{\Tstrut\Bstrut} % top&bottom struts
+
+\usepackage{tabularray}
+
+\title[RMP v\var{version}]
+{Robot Motion Planning}
+
+\subtitle
+{Filtering Algorithms}
+
+\author[Narayanan]
+{A.~Narayanan\inst{1}}
+
+\institute[Technical University of Munich]
+{
+  \inst{1}
+  Department of Informatics\\
+}
+
+\subject{Slides}
+\date{}
+
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+\begin{document}
+\begin{frame}
+    \titlepage
+  \end{frame}
+  
+  \begin{frame}{Outline}
+    \tableofcontents
+  \end{frame}
+
+  \section[]{Kalman Filter}
+
+  \begin{frame}
+    \frametitle{Kalman Filter}
+  
+    \begin{itemize}
+        \item Kalman filtering provides a recursive method of estimating the state of a dynamical system in the presence of noise
+        \item it simultaneously maintains estimates of both the state vector ($\hat{x}$) and the estimate error covariance matrix ($P$)
+        \item Kalman filter is a specific example of a more general technique known as \textbf{probabilistic estimation}
+        \item the motion model is assumed to be a linear function of the state variables and the inputs
+        \item Errors in both the motion model and the sensor model are assumed to be zero-mean white Gaussian noise
+    \end{itemize}
+  
+  \end{frame}
+
+  \section[]{Extended Kalman Filter}
+
+  \section[]{Unscented Kalman Filter}
+
+  \section[]{Bayes Filter}
+
+  \section[]{Particle Filter}
+\end{document}

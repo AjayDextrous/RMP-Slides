@@ -287,10 +287,34 @@
     \begin{equation}
       U_{att}(q) =
         \begin{cases}
-          \frac{1}{2}\zeta d^{2}(q, q_{goal})  & d(q, q_{goal} \leq d^{*}_{goal}\\
-          d^{*}_{goal}\zeta d(q, q_{goal}) - \frac{1}{2}\zeta (d^{*}_{goal})^{2} & d(q, q_{goal} > d^{*}_{goal}\\
+          \frac{1}{2}\zeta d^{2}(q, q_{goal})  & d(q, q_{goal}) \leq d^{*}_{goal}\\
+          d^{*}_{goal}\zeta d(q, q_{goal}) - \frac{1}{2}\zeta (d^{*}_{goal})^{2} & d(q, q_{goal}) > d^{*}_{goal}\\
         \end{cases}       
     \end{equation}
+
+  \end{frame}
+  
+  \begin{frame}
+    \frametitle{The Repulsive Potential}
+    \begin{itemize}
+      \item The strength of the repulsive force depends upon the robot's proximity to the an obstacle. The closer the robot is to an obstacle, the stronger the repulsive force should be.
+      \begin{equation}
+        U_{rep}(q) =
+          \begin{cases}
+            \frac{1}{2}\eta (\frac{1}{D(q)} - \frac{1}{Q^{*}})^{2}  & d(Q) \leq Q^{*}\\
+            0 & d(Q) > Q^{*}\\
+          \end{cases}       
+      \end{equation}
+      \item The repulsive potential function is redefined in terms of distances to individual obstacles where $d_{i}(q)$ is the distance to obstacle $QO_{i}$
+      \begin{equation}
+        d_{i}(q) = \min_{c \in QO_{i}} d(q,c) 
+      \end{equation}
+    \end{itemize}
+    \centering
+
+    
+
+    
 
   \end{frame}
 
