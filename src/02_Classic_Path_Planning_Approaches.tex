@@ -9,11 +9,15 @@
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{amsmath}
 
 \usepackage[]{datatool, filecontents}
 \DTLsetseparator{=}
 \DTLloaddb[noheader, keys={key,value}]{values}{./values.dat}
 \newcommand{\var}[1]{\DTLfetch{values}{key}{#1}{value}}
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}       % "top" strut
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}} % "bottom" strut
+\newcommand{\TBstrut}{\Tstrut\Bstrut} % top&bottom struts
 
 \usepackage{tabularray}
 
@@ -96,6 +100,16 @@
 
   \end{frame}
 
+  \begin{frame}{Advantages}
+    
+    \begin{enumerate}
+      \item Efficient method of path planning in the configuration space. It moves a large part of processing to offline. 
+      \item Just need to connect $q_{init}$, $q_{goal}$ to roadmap online.
+      \item Finding a path is like searching in a roadmap.
+    \end{enumerate}
+
+  \end{frame}
+
   \subsection[Visibility Maps]{Visibility Maps}
 
   \begin{frame}{Visibility Graph}
@@ -122,6 +136,16 @@
     \begin{columns}
       \begin{column}[]{0.4\textwidth}
         The graph edges $e_{ij}$ are straight-line segments that connect two line-of-sight nodes $v_{i}$ and $v_{j}$
+
+        \centering
+        \begin{table}
+          \begin{tblr}{|c|}
+            \hline
+            \textbf{Complexity:} $O(n^{2})$ \TBstrut\\
+            \hline
+          \end{tblr}
+        \end{table}
+        
       \end{column}
       \begin{column}[]{0.6\textwidth}
         \begin{center}
@@ -182,6 +206,14 @@
         \label{fig:fig06}
       \end{figure}
      \end{center}
+     \centering
+     \begin{table}
+       \begin{tblr}{|c|}
+         \hline
+         \textbf{Complexity:} $O(n \log(n))$ \TBstrut\\
+         \hline
+       \end{tblr}
+     \end{table}
   
   \end{frame}
 
@@ -199,6 +231,67 @@
 
   \section[Cell Decompositions]{Cell Decomposition}
 
+  \begin{frame}
+    \frametitle{Cell Decompositions}
+    The main idea is to decompose the free space into simple cells and represent the connectivity of the free space F by the adjacency of these cells. It is called an exact cell decomposition if the union of all cells is exactly F, meaning there is no overlap between cells.
+  \end{frame}
+
+  \subsection{Trapeziodal decomposition}
+
+  \begin{frame}
+    \frametitle{Trapeziodal Decomposition}
+    \begin{itemize}
+      \item The free space is bounded by polygons and C-Space obstacles are poygon shaped
+      \item decompose the space into trapezoidal triangle cells
+      \item connect every neighboring centered point in every neighboring cells that dont intersect with obstacles (\textbf{Adjacency graph})
+    \end{itemize}
+    \alert{Problems:} there are a lot of useless small cells that could be aggregated to avoid long and less efficient paths
+  
+  \end{frame}
+
+  \subsection{Boustrophedon Decomposition}
+
+  \begin{frame}
+    \frametitle{Boustrophedon Decomposition}
+    \begin{itemize}
+      \item Consider the vertices at which a vertical line can be extended both up and down in free space i.e. the critical points
+      \item set boundary lines at critical points
+      \item Then, an exhaustive walk through the critical
+      points is performed in order to obtain a connectivity graph
+    \end{itemize}    
+  
+  \end{frame}
+
   \section[Potential Field]{Potential Field}
+
+  \begin{frame}
+    \frametitle{Potential Field Method}
+    \begin{itemize}
+      \item The C-space is turned into a potential field, where the obstacles are surrounded by a repulsive field
+      \item The goal location by an attractive field. To navigate, the robot applies a force proportional to the negative gradient of the field - this is called gradient descent.
+      \item \textbf{Advantage:} potential field methods are easy to compute.
+      \item \textbf{Disadvantage:} They can suffer from local minima (where robot gets stuck), and they don't consider dynamic constraints in their initial form (forces can be too high).
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{The Attractive Potential}
+    \begin{itemize}
+      \item we could use \texttt{Conic Potential} - When numerically implementing this method, gradient descent may have "chattering" problems since there is a discontinuity in the attractive gradient at the origin. 
+      \item or we could use \texttt{Quadratic Potential} - grows without bound as $q$ moves away from $q_{goal}$. If $q_{start}$ is far from $q_{goal}$, this may produce a desired velocity that is too large
+      \item Solution - conic potential attracts the robot when it is very distant from $q_{goal}$ and the quadratic potential attracts the robot when it is near $q_{goal}$. 
+    \end{itemize}
+
+    \centering
+
+    \begin{equation}
+      U_{att}(q) =
+        \begin{cases}
+          \frac{1}{2}\zeta d^{2}(q, q_{goal})  & d(q, q_{goal} \leq d^{*}_{goal}\\
+          d^{*}_{goal}\zeta d(q, q_{goal}) - \frac{1}{2}\zeta (d^{*}_{goal})^{2} & d(q, q_{goal} > d^{*}_{goal}\\
+        \end{cases}       
+    \end{equation}
+
+  \end{frame}
 
 \end{document}

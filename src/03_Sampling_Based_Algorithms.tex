@@ -73,7 +73,6 @@ free space as good as possible, such that multiple, different queries
 for paths can be answered very fast. In other words: create a
 roadmap that is suitable for as many use cases as p
     
-  
   \end{frame}
 
   \begin{frame}
@@ -95,7 +94,19 @@ roadmap that is suitable for as many use cases as p
 
   \begin{frame}
     \frametitle{Drawbacks}
-    PRMs don’t perform well when there are narrow passages.
+    PRMs don't perform well when there are narrow passages.
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{How to Improve?}
+    \begin{itemize}
+      \item Increase number of milestones
+      \item Random walk
+      \item Path Correction
+      \item Sample at obstacle boundaries
+    \end{itemize}
+    
   
   \end{frame}
 
@@ -105,6 +116,59 @@ roadmap that is suitable for as many use cases as p
 obstacles. During sampling, the first goal is to find a point that
 lies inside an obstacle. Then, another point is sampled at an
 arbitrary distance to the first point. Using step-wise approximation, a point sufficiently close to the obstacle border is searched.
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Single Query Roadmaps}
+    Single query planners try to solve a single query as fast as possible, without trying to cover the whole free space
+    
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Weighted Randomized Tree Expansion}
+    \begin{enumerate}
+      \item expand trees from start and goal
+      \item pick a node with probability = $1/w(x)$, with $w(x)$ being the amount of neighbors within radius (measurement for exploration around x)
+      \item sample $k$ points $(y_{1}, \dots, y_{k})$ around $x$
+      \item add $y_{i}$ to the tree if
+        \begin{itemize}
+        \item $1/w(y_{i}) > 1/w(x)$
+        \item $y_{i}$ is collision free
+        \item $y_{i}$ can see $x$
+        \end{itemize}
+      \item if a pair of nodes from start tree and goal tree are close and can see each other, then connect them and terminate
+    \end{enumerate}  
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Rapidly Exploring Random Trees}
+    \begin{enumerate}
+      \item pick $q_{start}$ as the first node
+      \item pick a random target location (every $n^{th}$ iteration, choose $q_{goal}$)
+      \item find closest vertex in roadmap
+      \item extend this vertex towards target location
+      \item repeat steps until $q_{goal}$ is reached
+    \end{enumerate}
+
+    For faster execution, the tree can be grown from both $q_{start}$ and $q_{goal}$
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{How to sample}
+  
+  \end{frame}
+
+  \begin{frame}
+    \frametitle{Path Smoothening}
+  \end{frame}
+
+  \subsection{Expansiveness}
+
+  \begin{frame}
+    \frametitle{$\epsilon, \alpha, \beta$ - Expansiveness}
   
   \end{frame}
 
